@@ -4,6 +4,11 @@
 
 # Tracfit
 
+## Run Instructions:
+For front-end development only I recommend using the VSCode extension "Live Server"/"Live Preview" which allows you to view the pages and have changes update in real time.
+
+For full-stack development/anything requiring the server you will need to use Node, make sure this is installed [NodeJS][https://nodejs.org]
+
 ## File Structure
 ```
 📦F29PD-Site
