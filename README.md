@@ -20,8 +20,9 @@
  ┃ ┃ ┗ 📜index.css
  ┃ ┗ 📜index.html
  ┣ 📂server
- ┃ ┣ 📜package.json
- ┃ ┗ 📜server.js
+ ┃ ┣📜package.json
+ ┃ ┣📜healthappdb.sql
+ ┃ ┗📜server.js
  ┣ 📜.gitignore
  ┣ 📜PlanningDocument.md
  ┗ 📜README.md
