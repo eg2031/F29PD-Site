@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 10, 2026 at 02:56 PM
+-- Generation Time: Feb 12, 2026 at 11:26 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -37,6 +37,13 @@ CREATE TABLE `gpusers` (
   `centre` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `gpusers`
+--
+
+INSERT INTO `gpusers` (`gpID`, `username`, `email`, `password`, `firstname`, `surname`, `centre`) VALUES
+(1, 'DRJod', 'DRjod@medicalpractice.org', 'password', 'Doctor', 'Jodfrey', 'Jodfrey medical practice');
+
 -- --------------------------------------------------------
 
 --
@@ -44,10 +51,18 @@ CREATE TABLE `gpusers` (
 --
 
 CREATE TABLE `isgp` (
-  `userID` int(11) NOT NULL,
-  `gpID` int(11) NOT NULL,
+  `userID` int(10) NOT NULL,
+  `gpID` int(10) NOT NULL,
   `accepted` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `isgp`
+--
+
+INSERT INTO `isgp` (`userID`, `gpID`, `accepted`) VALUES
+(1, 1, 1),
+(2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -60,6 +75,13 @@ CREATE TABLE `userrelationships` (
   `user2` int(11) NOT NULL,
   `accepted` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `userrelationships`
+--
+
+INSERT INTO `userrelationships` (`user1`, `user2`, `accepted`) VALUES
+(1, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -78,13 +100,22 @@ CREATE TABLE `users` (
   `weight` float DEFAULT NULL COMMENT 'WEIGHT IN KG, USER INPUT',
   `stepcount` int(6) DEFAULT NULL COMMENT 'USER INPUTTED ',
   `stepgoal` int(6) DEFAULT NULL COMMENT 'USER INPUT',
-  `GPid` int(10) DEFAULT NULL COMMENT 'FK (NEEDS ADDED)',
+  `gpID` int(10) DEFAULT NULL COMMENT 'FK (NEEDS ADDED)',
   `kcal` int(5) DEFAULT NULL COMMENT 'RUNNING TOTAL OF USER INPUT',
   `avgRestHR` int(5) DEFAULT NULL COMMENT 'BIOMONITOR INPUT',
   `avgActiveHR` int(5) DEFAULT NULL COMMENT 'BIOMONITOR INPUT',
   `bloodPressure` int(5) DEFAULT NULL COMMENT 'BIOMONITOR INPUT',
   `fluidIntake` int(5) DEFAULT NULL COMMENT 'USER INPUT'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`userID`, `username`, `password`, `email`, `firstname`, `surname`, `dob`, `weight`, `stepcount`, `stepgoal`, `gpID`, `kcal`, `avgRestHR`, `avgActiveHR`, `bloodPressure`, `fluidIntake`) VALUES
+(1, 'jodfrey', 'testpassword', 'godfrey@jod.com', 'Ching Kong Godfrey', 'Lam', '2005-07-13', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL),
+(2, 'eg2031', 'testpass', 'eg2031@hw.ac.uk', 'Euan', 'G', '2005-01-15', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL),
+(3, 'user1', 'password', 'user1email@gmail.com', 'Test1', 'Test1', '2011-01-19', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -102,15 +133,15 @@ ALTER TABLE `gpusers`
 -- Indexes for table `isgp`
 --
 ALTER TABLE `isgp`
-  ADD PRIMARY KEY (`userID`,`gpID`),
-  ADD KEY `gpID` (`gpID`);
+  ADD KEY `idx_gpID` (`gpID`),
+  ADD KEY `userID` (`userID`);
 
 --
 -- Indexes for table `userrelationships`
 --
 ALTER TABLE `userrelationships`
   ADD PRIMARY KEY (`user1`,`user2`),
-  ADD KEY `user2` (`user2`);
+  ADD KEY `fk_userid2` (`user2`);
 
 --
 -- Indexes for table `users`
@@ -128,13 +159,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `gpusers`
 --
 ALTER TABLE `gpusers`
-  MODIFY `gpID` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `gpID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `userID` int(10) NOT NULL AUTO_INCREMENT COMMENT 'PK';
+  MODIFY `userID` int(10) NOT NULL AUTO_INCREMENT COMMENT 'PK', AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -144,15 +175,15 @@ ALTER TABLE `users`
 -- Constraints for table `isgp`
 --
 ALTER TABLE `isgp`
-  ADD CONSTRAINT `isgp_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`),
-  ADD CONSTRAINT `isgp_ibfk_2` FOREIGN KEY (`gpID`) REFERENCES `gpusers` (`gpID`);
+  ADD CONSTRAINT `fk_isgp_gp` FOREIGN KEY (`gpID`) REFERENCES `gpusers` (`gpID`),
+  ADD CONSTRAINT `fk_isgp_user` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`);
 
 --
 -- Constraints for table `userrelationships`
 --
 ALTER TABLE `userrelationships`
-  ADD CONSTRAINT `userrelationships_ibfk_1` FOREIGN KEY (`user1`) REFERENCES `users` (`userID`),
-  ADD CONSTRAINT `userrelationships_ibfk_2` FOREIGN KEY (`user2`) REFERENCES `users` (`userID`);
+  ADD CONSTRAINT `fk_userid1` FOREIGN KEY (`user1`) REFERENCES `users` (`userID`),
+  ADD CONSTRAINT `fk_userid2` FOREIGN KEY (`user2`) REFERENCES `users` (`userID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
