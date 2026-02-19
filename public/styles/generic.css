@@ -22,7 +22,7 @@ nav {
   justify-content: center;
   align-items: center;
   backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgb(187, 255, 109);
   border-radius: 10px;
 }
 
@@ -34,13 +34,7 @@ nav .usersName {
   color: whitesmoke;
   background-color: darkblue;
   border-radius: 10px;
-}
-
-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin: 10px 0;
 }
 
 .row {
@@ -51,9 +45,9 @@ main {
   flex: 10%;
   margin: 20px;
   padding: 0rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: 0.5rem 0rem;
 }
 
 .container {
-  background-color: rgba(200, 200, 200, 0.2);
+  background-color: rgb(150, 150, 150);
 }

@@ -5,7 +5,7 @@
     <meta name="generator" content="GitLab Pages" />
     <title>Register</title>
     <link rel="stylesheet" href="../styles/generic.css" />
-    <link rel="stylesheet" href="../styles/login.css" />
+    <link rel="stylesheet" href="../styles/register.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,13 +15,21 @@
   </head>
   <body>
     <nav>
-      <h1>Good Afternoon</h1>
-      <div class="usersName">
-        <h1>John Doe</h1>
-      </div>
+      <h1>TracFit - Account Registration</h1>
     </nav>
 
     <div class="main">
+      <div class="formWrapper">
+        <form class="registrationForm">
+          <label for="email">Email:</label>
+          <input type="email" id="email" placeholder="email.@email.com" autocomplete="email"/><br>
+
+          <label for="password">Password:</label>
+          <input type="password" id="password" placeholder="Password" autocomplete="new-password"><br>
+
+          <input type="submit" value="Register"/>
+        </form>
+      </div>
     </div>
   </body>
 </html>

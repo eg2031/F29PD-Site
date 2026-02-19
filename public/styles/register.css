@@ -1,0 +1,42 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.registrationForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+  border-radius: 10px 0px;
+  background: rgb(150, 150, 150);
+  color: white;
+}
+
+input {
+  background-color: rgb(187, 255, 109);
+  border: none;
+  border-radius: 10px 0px;
+  padding: 15px 25px;
+  text-decoration: none;
+  color: black;
+}
+::placeholder {
+  color: black;
+  opacity: 1; /* Firefox */
+}
+
+input[type="submit"] {
+  cursor: pointer;
+}
