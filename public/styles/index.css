@@ -1,6 +1,7 @@
 .healthMetrics {
   text-align: center;
   background-color: rgba(200, 100, 100, 0.3);
+  color: rgb(150, 150, 150);
 }
 .leaderboard {
   text-align: center;
