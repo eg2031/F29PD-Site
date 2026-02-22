@@ -6,24 +6,6 @@
   height: 100%;
 }
 
-.formWrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.registrationForm {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 50px;
-  border-radius: 10px 0px;
-  background: rgb(150, 150, 150);
-  color: white;
-}
-
 input {
   background-color: rgb(187, 255, 109);
   border: none;

@@ -72,3 +72,14 @@ nav .usersName {
 .container {
   background-color: rgb(150, 150, 150);
 }
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1% 30px;
+  border-radius: 10px 0px;
+  background: rgb(150, 150, 150);
+  color: white;
+}
