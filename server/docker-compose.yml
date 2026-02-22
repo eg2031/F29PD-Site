@@ -1,0 +1,12 @@
+services:
+  db:
+    image: mysql:8
+    container_name: healthapp-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: healthappdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./healthappdb.sql:/docker-entrypoint-initdb.d/init.sql
