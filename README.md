@@ -35,7 +35,9 @@ Requirements:
 - Node.js (LTS version) installed
 
 1) Start the MySQL Database
+
 From the project root directory run the following commands:
+
     cd server
     docker compose up
 
@@ -53,6 +55,7 @@ To stop the database later:
 2) Install Backend Dependencies
 
 Open a new terminal window and enter the following commands:
+    
     cd server
     npm install
 
