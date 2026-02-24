@@ -31,7 +31,7 @@ CREATE TABLE `gpusers` (
   `gpID` int(10) NOT NULL,
   `username` varchar(30) NOT NULL,
   `email` varchar(50) NOT NULL COMMENT 'ADD EMAIL CONSTRAINTS',
-  `password` varchar(50) NOT NULL COMMENT 'HASHED PASSWORD',
+  `password` varchar(255) NOT NULL COMMENT 'HASHED PASSWORD',
   `firstname` varchar(30) NOT NULL,
   `surname` varchar(30) NOT NULL,
   `centre` varchar(50) NOT NULL
