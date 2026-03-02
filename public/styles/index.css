@@ -3,6 +3,11 @@
   background-color: rgba(200, 100, 100, 0.3);
   color: rgb(150, 150, 150);
 }
+
+.healthMetric {
+  border: 5px inset rgb(255, 50, 50);
+}
+
 .leaderboard {
   text-align: center;
 }
