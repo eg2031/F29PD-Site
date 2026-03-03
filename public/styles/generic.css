@@ -1,3 +1,8 @@
+:root {
+  --CustomLightGrey: rgb(150, 150, 150);
+  --CustomDarkGrey: rgb(100, 100, 100);
+}
+
 html,
 body {
   margin: 0;
@@ -43,7 +48,7 @@ nav {
 
 nav a {
   text-decoration: none;
-  color: rgb(100, 100, 100);
+  color: var(--CustomDarkGrey);
   border: 5px inset rgb(50, 200, 50);
   background-color:rgb(220, 255, 220);
   padding: 0.5rem;
@@ -55,11 +60,8 @@ nav h1 {
   margin: 10px 0;
 }
 
-nav .usersName {
-  color: whitesmoke;
-  background-color: darkblue;
-  border-radius: 10px;
-  margin: 10px 0;
+nav p {
+  margin: 0px;
 }
 
 .row {
@@ -74,7 +76,12 @@ nav .usersName {
 }
 
 .container {
-  background-color: rgb(150, 150, 150);
+  background-color: var(--CustomLightGrey);
+}
+
+.containerTitle {
+  background-color: var(--CustomDarkGrey);
+  text-align: center;
 }
 
 .mainContainer {
@@ -84,6 +91,18 @@ nav .usersName {
   align-items: center;
   padding: 1% 30px;
   border-radius: 10px 0px;
-  background: rgb(150, 150, 150);
+  background: var(--CustomLightGrey);
   color: white;
+}
+
+img {
+  padding: 10px;
+  background-color: var(--CustomDarkGrey);
+  border-radius: 10px 0px;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
