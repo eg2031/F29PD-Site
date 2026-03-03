@@ -22,7 +22,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgb(187, 255, 109);
+  background-color: rgb(168, 230, 98);
 }
 
 .nav-left,
@@ -43,12 +43,16 @@ nav {
 
 nav a {
   text-decoration: none;
-  color: rgb(150, 150, 150);
-
+  color: rgb(100, 100, 100);
+  border: 5px inset rgb(50, 200, 50);
+  background-color:rgb(220, 255, 220);
+  padding: 0.5rem;
+  margin: 0rem 0.25rem;
 }
 
 nav h1 {
   padding: 5px;
+  margin: 10px 0;
 }
 
 nav .usersName {
