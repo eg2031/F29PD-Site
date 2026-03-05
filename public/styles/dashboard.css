@@ -1,7 +1,13 @@
+:root {
+  --CustomLightGrey: rgb(150, 150, 150);
+  --CustomDarkGrey: rgb(100, 100, 100);
+  --CustomGreen: rgb(168, 230, 98);
+}
+
 .healthMetrics {
   text-align: center;
   background-color: rgba(200, 100, 100, 0.3);
-  color: rgb(100, 100, 100);
+  color: var(--CustomDarkGrey);
 }
 
 .healthMetric {
@@ -11,10 +17,11 @@
 
 .dataForm {
   flex-direction: column;
+  border: 3px solid var(--CustomDarkGrey);
 }
 
 input {
-  background-color: rgb(187, 255, 109);
+  background-color: var(--CustomGreen);
   border: none;
   border-radius: 10px 0px;
   padding: 15px 25px;
@@ -65,9 +72,9 @@ th, td {
 }
 
 tr:nth-child(even) {
-  background-color: rgb(168, 230, 98);
+  background-color: var(--CustomGreen);
 }
 
 tr:hover {
-  background-color: rgb(168, 230, 98);
+  background-color: var(--CustomGreen);
 }
