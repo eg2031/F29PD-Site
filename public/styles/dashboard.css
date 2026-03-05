@@ -9,6 +9,28 @@
   background-color:rgb(255, 220, 220);
 }
 
+.dataForm {
+  flex-direction: column;
+}
+
+input {
+  background-color: rgb(187, 255, 109);
+  border: none;
+  border-radius: 10px 0px;
+  padding: 15px 25px;
+  text-decoration: none;
+  color: black;
+}
+::placeholder {
+  color: black;
+  opacity: 1; /* Firefox */
+}
+
+input[type="submit"] {
+  cursor: pointer;
+  margin: 1rem;
+}
+
 .leaderboard {
   text-align: center;
 }
@@ -19,10 +41,12 @@ progress {
   height: 15px;
   margin-bottom: 20px;
 }
+
 progress::-webkit-progress-bar {
   background-color: rgb(146, 182, 223);
   border-radius: 10px;
 }
+
 progress::-webkit-progress-value {
   background-color: rgb(66, 25, 248);
   border-radius: 10px;
