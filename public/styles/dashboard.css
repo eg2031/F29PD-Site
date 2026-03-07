@@ -79,7 +79,7 @@ tr:hover {
   background-color: var(--CustomGreen);
 }
 
-.dropbtn {
+.dropdownButton {
   background-color: var(--CustomGreen);
   color: white;
   padding: 16px;

@@ -1,12 +1,20 @@
-/* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
+document.addEventListener("DOMContentLoaded", () => {
+
+});
+
 function dropDown() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
 
-// Close the dropdown menu if the user clicks outside of it
+function displayEntryBox(entryBoxID) {
+  console.log(entryBoxID);
+  let shown = document.getElementById(entryBoxID).style.display;
+  document.getElementById(entryBoxID).style.display = "hidden";
+  // document.getElementById(entryBoxID).style.display = (shown === 'show') ? "hidden" : 'show';
+}
+
 window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
+  if (!event.target.matches('.dropdownButton')) {
     var dropdowns = document.getElementsByClassName("dropdown-content");
     var i;
     for (i = 0; i < dropdowns.length; i++) {
