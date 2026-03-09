@@ -1,12 +1,41 @@
+:root {
+  --CustomLightGrey: rgb(150, 150, 150);
+  --CustomDarkGrey: rgb(100, 100, 100);
+  --CustomGreen: rgb(168, 230, 98);
+}
+
 .healthMetrics {
   text-align: center;
   background-color: rgba(200, 100, 100, 0.3);
-  color: rgb(100, 100, 100);
+  color: var(--CustomDarkGrey);
 }
 
 .healthMetric {
   border: 5px inset rgb(255, 50, 50);
   background-color:rgb(255, 220, 220);
+}
+
+.dataForm {
+  flex-direction: column;
+  border: 3px solid var(--CustomDarkGrey);
+}
+
+input {
+  background-color: var(--CustomGreen);
+  border: none;
+  border-radius: 10px 0px;
+  padding: 15px 25px;
+  text-decoration: none;
+  color: black;
+}
+::placeholder {
+  color: black;
+  opacity: 1; /* Firefox */
+}
+
+input[type="submit"] {
+  cursor: pointer;
+  margin: 1rem;
 }
 
 .leaderboard {
@@ -19,10 +48,12 @@ progress {
   height: 15px;
   margin-bottom: 20px;
 }
+
 progress::-webkit-progress-bar {
   background-color: rgb(146, 182, 223);
   border-radius: 10px;
 }
+
 progress::-webkit-progress-value {
   background-color: rgb(66, 25, 248);
   border-radius: 10px;
@@ -41,9 +72,47 @@ th, td {
 }
 
 tr:nth-child(even) {
-  background-color: rgb(168, 230, 98);
+  background-color: var(--CustomGreen);
 }
 
 tr:hover {
-  background-color: rgb(168, 230, 98);
+  background-color: var(--CustomGreen);
 }
+
+.dropdownButton {
+  background-color: var(--CustomGreen);
+  padding: 20px;
+  border: none;
+  border-radius: 10px 0px;
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
