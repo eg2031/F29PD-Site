@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const path = require('path');
-
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -48,6 +47,40 @@ app.post('/register', (req, res) => {
   );
 });
 
+// login 
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.send("Email and password are required");
+  }
+
+  const sql = `SELECT * FROM users WHERE email = ?`;
+  connection.query(sql, [email], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.send("Login failed: " + err.sqlMessage);
+    }
+
+    if (results.length === 0) {
+      return res.send("No user found with that email");
+    }
+
+    const user = results[0];
+
+    // password check
+    if (password !== user.password) {
+      return res.send("Incorrect password");
+    }
+
+    // Login successful messgege
+    res.send(`Welcome ${user.firstname} ${user.surname}!`);
+  });
+});
+
+
 app.listen(8081, () => {
   console.log("Server running at http://127.0.0.1:8081/");
 });
+
+ 
