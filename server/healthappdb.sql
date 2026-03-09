@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 12, 2026 at 11:26 AM
+-- Generation Time: Mar 03, 2026 at 01:12 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,7 +31,7 @@ CREATE TABLE `gpusers` (
   `gpID` int(10) NOT NULL,
   `username` varchar(30) NOT NULL,
   `email` varchar(50) NOT NULL COMMENT 'ADD EMAIL CONSTRAINTS',
-  `password` varchar(50) NOT NULL COMMENT 'HASHED PASSWORD',
+  `password` varchar(255) NOT NULL COMMENT 'HASHED PASSWORD',
   `firstname` varchar(30) NOT NULL,
   `surname` varchar(30) NOT NULL,
   `centre` varchar(50) NOT NULL
@@ -63,6 +63,22 @@ CREATE TABLE `isgp` (
 INSERT INTO `isgp` (`userID`, `gpID`, `accepted`) VALUES
 (1, 1, 1),
 (2, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userrecords`
+--
+
+CREATE TABLE `userrecords` (
+  `userID` int(11) NOT NULL,
+  `avgSteps` int(11) NOT NULL,
+  `avgKcal` int(11) NOT NULL,
+  `avgRestHR` int(11) NOT NULL,
+  `avgActiveHR` int(11) NOT NULL,
+  `avgFluids` float NOT NULL,
+  `pbSteps` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -102,20 +118,20 @@ CREATE TABLE `users` (
   `stepgoal` int(6) DEFAULT NULL COMMENT 'USER INPUT',
   `gpID` int(10) DEFAULT NULL COMMENT 'FK (NEEDS ADDED)',
   `kcal` int(5) DEFAULT NULL COMMENT 'RUNNING TOTAL OF USER INPUT',
-  `avgRestHR` int(5) DEFAULT NULL COMMENT 'BIOMONITOR INPUT',
-  `avgActiveHR` int(5) DEFAULT NULL COMMENT 'BIOMONITOR INPUT',
-  `bloodPressure` int(5) DEFAULT NULL COMMENT 'BIOMONITOR INPUT',
-  `fluidIntake` int(5) DEFAULT NULL COMMENT 'USER INPUT'
+  `fluidIntake` int(5) DEFAULT NULL COMMENT 'USER INPUT',
+  `systolicPressure` int(11) DEFAULT NULL,
+  `diastolicPressure` int(11) DEFAULT NULL,
+  `bloodPressure` varchar(7) GENERATED ALWAYS AS (concat(`systolicPressure`,'/',`diastolicPressure`)) STORED
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userID`, `username`, `password`, `email`, `firstname`, `surname`, `dob`, `weight`, `stepcount`, `stepgoal`, `gpID`, `kcal`, `avgRestHR`, `avgActiveHR`, `bloodPressure`, `fluidIntake`) VALUES
-(1, 'jodfrey', 'testpassword', 'godfrey@jod.com', 'Ching Kong Godfrey', 'Lam', '2005-07-13', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL),
-(2, 'eg2031', 'testpass', 'eg2031@hw.ac.uk', 'Euan', 'G', '2005-01-15', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL),
-(3, 'user1', 'password', 'user1email@gmail.com', 'Test1', 'Test1', '2011-01-19', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`userID`, `username`, `password`, `email`, `firstname`, `surname`, `dob`, `weight`, `stepcount`, `stepgoal`, `gpID`, `kcal`, `fluidIntake`, `systolicPressure`, `diastolicPressure`) VALUES
+(1, 'jodfrey', 'testpassword', 'godfrey@jod.com', 'Ching Kong Godfrey', 'Lam', '2005-07-13', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
+(2, 'eg2031', 'testpass', 'eg2031@hw.ac.uk', 'Euan', 'G', '2005-01-15', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
+(3, 'user1', 'password', 'user1email@gmail.com', 'Test1', 'Test1', '2011-01-19', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -135,6 +151,12 @@ ALTER TABLE `gpusers`
 ALTER TABLE `isgp`
   ADD KEY `idx_gpID` (`gpID`),
   ADD KEY `userID` (`userID`);
+
+--
+-- Indexes for table `userrecords`
+--
+ALTER TABLE `userrecords`
+  ADD KEY `fk_userid` (`userID`);
 
 --
 -- Indexes for table `userrelationships`
@@ -177,6 +199,12 @@ ALTER TABLE `users`
 ALTER TABLE `isgp`
   ADD CONSTRAINT `fk_isgp_gp` FOREIGN KEY (`gpID`) REFERENCES `gpusers` (`gpID`),
   ADD CONSTRAINT `fk_isgp_user` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`);
+
+--
+-- Constraints for table `userrecords`
+--
+ALTER TABLE `userrecords`
+  ADD CONSTRAINT `fk_userid` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`);
 
 --
 -- Constraints for table `userrelationships`

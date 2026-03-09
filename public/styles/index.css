@@ -1,23 +1,13 @@
-.healthMetrics {
-  text-align: center;
-  background-color: rgba(200, 100, 100, 0.3);
-  color: rgb(150, 150, 150);
-}
-.leaderboard {
-  text-align: center;
+.textImagePair {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-progress {
-  border-radius: 10px;
-  width: 80%;
-  height: 15px;
-  margin-bottom: 20px;
+.stockImage {
+  width: 30vw;
 }
-progress::-webkit-progress-bar {
-  background-color: rgb(146, 182, 223);
-  border-radius: 10px;
-}
-progress::-webkit-progress-value {
-  background-color: rgb(66, 25, 248);
-  border-radius: 10px;
+
+li {
+  margin: 1rem 0rem;
 }

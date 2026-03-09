@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="generator" content="GitLab Pages" />
-    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TracFit</title>
     <link rel="stylesheet" href="../styles/generic.css" />
     <link rel="stylesheet" href="../styles/index.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,54 +19,43 @@
     ></script>
   </head>
   <body>
-    <nav>
+    <nav class="flexAlign">
       <div class="nav-left">
-        <a href="account.html">account</a>
         <a href="register.html">register</a>
         <a href="login.html">login</a>
         <a href="browseData.html">browseData</a>
       </div>
       <div class="nav-center">
-        <h1>Good Afternoon</h1>
-        <div class="usersName">
-          <h1>John Doe</h1>
-        </div>
+        <a href="index.html" class="fa-2x"><p>TracFit</p></a>
       </div>
       <div class="nav-right">
+        <a href="dashboard.html"><i class="fa-3x fa-regular fa-house"></i></a>
         <a href="account.html"><i class="fa-3x fa-regular fa-user"></i></a>
       </div>
     </nav>
 
     <div class="main">
-      <div class="row 1">
-        <div class="column CurrentGoal">
-          <div class="row">
+        <div class="row">
             <div class="column container">
-              <div class="currentGoal">
-                <h2>Current Goal</h2>
-                <div class="goalProgress">
-                  <h1>Weight Loss</h1>
-                  <progress value="32" max="100">32%</progress>
+                <h1 class="containerTitle">TracFit</h1>
+                <h2>A health tracking system</h2>
+                <div class="container textImagePair">
+                    <div class="row">
+                        <div class="column container flexAlign">
+                            <ul>
+                              <li>TracFit is an innovative, intuitive and interactive health monitoring system, aiming to facilitate people keeping on top of all of the data that goes into keeping them fit and happy.</li>
+                              <li>With a powerful data focussed dashboard TracFit allows you to maintain control, we manage all of the data process it into an understandable, usable format.</li>
+                              <li>Our goal is to diminish the difficulties that come with tracking a multitude of complex metrics, meaning you don't have to get bogged down crunching numbers, you want to get fit, not get smart!</li>
+                            </ul>
+                        </div>
+                        <div class="column flexAlign imageContainer">
+                            <img src="../../images/yoga.jpg" class="stockImage">
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="column container">aaa</div>
-          </div>
         </div>
-        <div class="column container healthMetrics">
-          <h1>Health Metrics</h1>
-        </div>
-      </div>
-      <div class="row 2">
-        <div class="column container">
-          <h1>Record Daily Data</h1>
-        </div>
-        <div class="column container leaderboard">
-          <h1>Leaderboard</h1>
-        </div>
-      </div>
+      
     </div>
   </body>
 </html>

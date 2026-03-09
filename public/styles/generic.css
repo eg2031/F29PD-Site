@@ -1,3 +1,14 @@
+:root {
+  --CustomLightGrey: rgb(150, 150, 150);
+  --CustomDarkGrey: rgb(100, 100, 100);
+}
+
+.flexAlign {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 html,
 body {
   margin: 0;
@@ -19,10 +30,7 @@ body {
 }
 
 nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: rgb(187, 255, 109);
+  background-color: rgb(168, 230, 98);
 }
 
 .nav-left,
@@ -43,19 +51,20 @@ nav {
 
 nav a {
   text-decoration: none;
-  color: rgb(150, 150, 150);
-
+  color: var(--CustomDarkGrey);
+  border: 5px inset rgb(50, 200, 50);
+  background-color:rgb(220, 255, 220);
+  padding: 0.5rem;
+  margin: 0rem 0.25rem;
 }
 
 nav h1 {
   padding: 5px;
+  margin: 10px 0;
 }
 
-nav .usersName {
-  color: whitesmoke;
-  background-color: darkblue;
-  border-radius: 10px;
-  margin: 10px 0;
+nav p {
+  margin: 0px;
 }
 
 .row {
@@ -70,16 +79,28 @@ nav .usersName {
 }
 
 .container {
-  background-color: rgb(150, 150, 150);
+  background-color: var(--CustomLightGrey);
+}
+
+.containerTitle {
+  background-color: var(--CustomDarkGrey);
+  text-align: center;
 }
 
 .mainContainer {
-  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 1% 30px;
   border-radius: 10px 0px;
-  background: rgb(150, 150, 150);
+  background: var(--CustomLightGrey);
   color: white;
+}
+
+img {
+  padding: 10px;
+  background-color: var(--CustomDarkGrey);
+  border-radius: 10px 0px;
+}
+
+.imageContainer {
+  justify-content: center;
 }

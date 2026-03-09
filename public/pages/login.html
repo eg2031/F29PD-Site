@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="generator" content="GitLab Pages" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <link rel="stylesheet" href="../styles/generic.css" />
     <link rel="stylesheet" href="../styles/register.css" />
@@ -18,16 +19,17 @@
     ></script>
   </head>
   <body>
-    <nav>
+    <nav class="flexAlign">
       <div class="nav-left"></div>
       <div class="nav-center">
-        <h1>TracFit - Login</h1>
+        <a href="index.html" class="fa-2x"><p>TracFit</p></a>
+        <h1> - Login</h1>
       </div>
       <div class="nav-right"></div>
     </nav>
 
     <div class="main">
-        <form class="mainContainer">
+        <form class="mainContainer flexAlign">
           <label for="email">Email:</label>
           <input
             type="email"
@@ -45,6 +47,7 @@
           /><br />
 
           <input type="submit" value="Login" />
+          <p class="registerlink">Don't have an account? <a href="register.html">Register</a></p>
         </form>
     </div>
   </body>

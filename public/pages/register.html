@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="generator" content="GitLab Pages" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
     <link rel="stylesheet" href="../styles/generic.css" />
     <link rel="stylesheet" href="../styles/register.css" />
@@ -15,10 +16,11 @@
     <script src="https://kit.fontawesome.com/f06588c779.js" crossorigin="anonymous"></script>
   </head>
   <body>
-    <nav>
+    <nav class="flexAlign">
       <div class="nav-left"></div>
       <div class="nav-center">
-        <h1>TracFit - Account Registration</h1>
+        <a href="index.html" class="fa-2x"><p>TracFit</p></a>
+        <h1> - Account Registration</h1>
       </div>
       <div class="nav-right">
         <a href="account.html"><i class="fa-3x fa-regular fa-user"></i></a>
@@ -27,7 +29,7 @@
 
     <div class="main">
 
-        <form class="mainContainer">
+        <form class="mainContainer flexAlign">
           <label for="firstName">First name:</label>
           <input type="text" id="firstName" placeholder="John" autocomplete="given-name"/><br>
 
@@ -47,6 +49,8 @@
           <input type="password" id="password" placeholder="Password" autocomplete="new-password"><br>
 
           <input type="submit" value="Register"/>
+
+          <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
         </form>
     </div>
   </body>
