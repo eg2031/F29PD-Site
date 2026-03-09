@@ -1,6 +1,14 @@
 require('dotenv').config();
-const http = require('http');
+const express = require('express');
 const mysql = require('mysql2');
+const path = require('path');
+
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+
+// serve frontend files
+app.use(express.static(path.join(__dirname, "../public")));
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -17,9 +25,29 @@ connection.connect((err) => {
   }
 });
 
-http.createServer((req, res) => {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Server + DB connected');
-}).listen(8081);
+app.post('/register', (req, res) => {
+  const { firstName, familyName, username, dob, email, password } = req.body;
 
-console.log('Server running at http://127.0.0.1:8081/');
+  const sql = `
+    INSERT INTO users (firstname, surname, username, dob, email, password)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  connection.query(
+    sql,
+    [firstName, familyName, username, dob, email, password],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        res.send("Registration failed: " + err.sqlMessage);
+        return;
+      }
+
+      res.send("User registered successfully!");
+    }
+  );
+});
+
+app.listen(8081, () => {
+  console.log("Server running at http://127.0.0.1:8081/");
+});
