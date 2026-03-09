@@ -41,8 +41,8 @@ app.post('/register', (req, res) => {
         res.send("Registration failed: " + err.sqlMessage);
         return;
       }
-
-      res.send("User registered successfully!");
+      // Registration successful then redirect to login page
+      res.redirect('/pages/register.html');
     }
   );
 });
