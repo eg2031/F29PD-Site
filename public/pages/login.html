@@ -29,11 +29,12 @@
     </nav>
 
     <div class="main">
-        <form class="mainContainer flexAlign">
+        <form class="mainContainer flexAlign" method="POST" action="/login">
           <label for="email">Email:</label>
           <input
             type="email"
             id="email"
+            name="email"
             placeholder="email.@email.com"
             autocomplete="email"
           /><br />
@@ -42,6 +43,7 @@
           <input
             type="password"
             id="password"
+            name="password"
             placeholder="Password"
             autocomplete="current-password"
           /><br />
