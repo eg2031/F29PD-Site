@@ -7,10 +7,8 @@ function dropDown() {
 }
 
 function displayEntryBox(entryBoxID) {
-  console.log(entryBoxID);
-  let shown = document.getElementById(entryBoxID).style.display;
-  document.getElementById(entryBoxID).style.display = "hidden";
-  // document.getElementById(entryBoxID).style.display = (shown === 'show') ? "hidden" : 'show';
+  var dropdownItem = document.getElementById(entryBoxID);
+  dropdownItem.style.display = (dropdownItem.style.display !== 'none') ? "none" : 'flex';
 }
 
 window.onclick = function(event) {

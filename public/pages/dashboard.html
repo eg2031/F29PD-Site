@@ -82,14 +82,14 @@
           <h1 class="containerTitle">Record Daily Data</h1>
           <div class="row">
             <div class="flexAlign column dropdown">
-              <button onclick="dropDown()" class="dropdownButton">Dropdown</button>
+              <button onclick="dropDown()" class="dropdownButton">Other Stats</button>
               <div id="myDropdown" class="dropdown-content">
-                <a onclick="displayEntryBox('calories')">Link 1</a>
-                <a onclick="displayEntryBox('steps')">Link 2</a>
-                <a onclick="displayEntryBox('fluidIntake')">Link 3</a>
+                <a onclick="displayEntryBox('caloriesForm')">Calories</a>
+                <a onclick="displayEntryBox('stepsForm')">Steps</a>
+                <a onclick="displayEntryBox('fluidIntakeForm')">Fluid Intake</a>
               </div>
             </div>
-            <form id="calories" class="flexAlign dataForm column">
+            <form id="caloriesForm" class="flexAlign dataForm column shown">
               <label for="calories">Calories:</label>
               <input
                 type="number"
@@ -99,7 +99,7 @@
               /><br />
               <input type="submit" value="Submit" />
             </form>
-            <form id="steps" class="flexAlign dataForm column">
+            <form id="stepsForm" class="flexAlign dataForm column shown">
               <label for="steps">Steps:</label>
               <input
                 type="number"
@@ -109,7 +109,7 @@
               /><br />
               <input type="submit" value="Submit" />
             </form>
-            <form id="fluidIntake" class="flexAlign dataForm column">
+            <form id="fluidIntakeForm" class="flexAlign dataForm column shown">
               <label for="fluidIntake">Fluid intake (ml):</label>
               <input
                 type="number"

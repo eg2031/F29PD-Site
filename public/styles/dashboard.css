@@ -81,10 +81,9 @@ tr:hover {
 
 .dropdownButton {
   background-color: var(--CustomGreen);
-  color: white;
-  padding: 16px;
-  font-size: 16px;
+  padding: 20px;
   border: none;
+  border-radius: 10px 0px;
   cursor: pointer;
 }
 
