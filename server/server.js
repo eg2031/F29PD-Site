@@ -73,8 +73,8 @@ app.post('/login', (req, res) => {
       return res.send("Incorrect password");
     }
 
-    // Login successful messgege
-    res.send(`Welcome ${user.firstname} ${user.surname}!`);
+    // Login successful then redirect to index.html
+    res.redirect('/pages/index.html');
   });
 });
 
