@@ -20,6 +20,11 @@ function requireAuth(req, res, next) {
   res.redirect('/pages/login.html');
 }
 
+// protected pages before static
+app.get('/pages/dashboard.html', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/dashboard.html')); });
+app.get('/pages/account.html', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/account.html')); });
+app.get('/pages/browseData.html', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/browseData.html')); });
+
 // serve frontend files
 app.use(express.static(path.join(__dirname, "../public")));
 
@@ -121,11 +126,80 @@ app.post('/logout', (req, res) => {
   });
 });
 
-app.get('/pages/dashboard.html', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/dashboard.html')); });
-app.get('/pages/account.html', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/account.html')); });
-app.get('/pages/browseData.html', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/browseData.html')); });
-
 app.get('/api/account', requireAuth, (req, res) => { res.json(req.session.user); });
+
+// usrrecrord stuff
+app.post('/api/user-record', requireAuth, (req,res) => {
+  var userID = req.session.user.userID;
+  var field = req.body.field;
+  var value = req.body.value;
+  var date = req.body.date;
+
+  var allowedFields = ['calories','steps','fluidIntake','weight','restHR','activeHR'];
+  if(allowedFields.indexOf(field) === -1) return res.status(400).json({error: 'Invalid field'});
+  if(value === undefined || isNaN(value)) return res.status(400).json({error: 'Invalid value'});
+  if(!date) return res.status(400).json({error: 'Date required'});
+
+  var sql = 'INSERT INTO userRecords (userID, date, '+field+') VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE '+field+' = ?';
+
+  connection.query(sql, [userID, date, value, value], (err) => {
+    if(err){
+      console.error(err);
+      return res.status(500).json({error: 'Failed to save'});
+    }
+    res.json({success: true});
+  });
+});
+
+app.post('/api/user-record-bp', requireAuth, (req,res) => {
+  var userID = req.session.user.userID;
+  var sys = req.body.systolic;
+  var dia = req.body.diastolic;
+  var date = req.body.date;
+
+  if(!sys || !dia || !date) return res.status(400).json({error: 'All fields required'});
+
+  var sql = 'INSERT INTO userRecords (userID, date, systolicPressure, diastolicPressure) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE systolicPressure = ?, diastolicPressure = ?';
+
+  connection.query(sql, [userID, date, sys, dia, sys, dia], (err) => {
+    if(err){
+      console.error(err);
+      return res.status(500).json({error: 'Failed to save'})
+    }
+    res.json({success: true});
+  });
+});
+
+app.get('/api/user-records', requireAuth, (req,res) => {
+  var userID = req.session.user.userID;
+  var from = req.query.from;
+  var to = req.query.to;
+
+  var sql = 'SELECT date, calories, steps, fluidIntake, weight, restHR, activeHR, systolicPressure, diastolicPressure FROM userRecords WHERE userID = ?';
+  var params = [userID];
+
+  if(from){ sql += ' AND date >= ?'; params.push(from); }
+  if(to){ sql += ' AND date <= ?'; params.push(to); }
+  sql += ' ORDER BY date ASC';
+
+  connection.query(sql, params, (err, results) => {
+    if(err){
+      console.error(err);
+      return res.status(500).json({error: 'Failed to fetch records'});
+    }
+    var out = [];
+    for(var i = 0; i < results.length; i++){
+      var r = results[i];
+      out.push({
+        date: r.date.toISOString().split('T')[0],
+        calories: r.calories, steps: r.steps, fluidIntake: r.fluidIntake,
+        weight: r.weight, restHR: r.restHR, activeHR: r.activeHR,
+        systolicPressure: r.systolicPressure, diastolicPressure: r.diastolicPressure
+      });
+    }
+    res.json(out);
+  });
+});
 
 app.listen(8081, () => {
   console.log("Server running at http://127.0.0.1:8081/");
