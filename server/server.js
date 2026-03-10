@@ -9,6 +9,10 @@ app.use(express.urlencoded({ extended: true }));
 // serve frontend files
 app.use(express.static(path.join(__dirname, "../public")));
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/pages/index.html'));
+});
+
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
