@@ -14,16 +14,16 @@ function updateNav(loggedIn, user) {
 
   if (loggedIn) {
     navLeft.innerHTML = `
-      <a href="dashboard.html">Dashboard</a>
-      <a href="browseData.html">My Data</a>
+      <a href="dashboard">Dashboard</a>
+      <a href="browseData">My Data</a>
       <form action="/logout" method="POST" style="display:inline;margin:0;padding:0;">
         <button type="submit" class="nav-logout-btn">Logout</button>
       </form>
     `;
   } else {
     navLeft.innerHTML = `
-      <a href="register.html">Register</a>
-      <a href="login.html">Login</a>
+      <a href="register">Register</a>
+      <a href="login">Login</a>
     `;
   }
 }

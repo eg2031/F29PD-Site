@@ -17,19 +17,25 @@ app.use(session({
 function requireAuth(req, res, next) {
   if (req.session && req.session.user) return next();
   if (req.headers.accept && req.headers.accept.includes('application/json')) return res.status(401).json({ error: 'Not authenticated' });
-  res.redirect('/pages/login.html');
+  res.redirect('/login');
 }
 
 // protected pages before static
-app.get('/pages/dashboard.html', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/dashboard.html')); });
-app.get('/pages/account.html', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/account.html')); });
-app.get('/pages/browseData.html', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/browseData.html')); });
+app.get('/dashboard', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/dashboard.html')); });
+app.get('/account', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/account.html')); });
+app.get('/browseData', requireAuth, (req, res) => { res.sendFile(path.join(__dirname, '../public/pages/browseData.html')); });
 
 // serve frontend files
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/pages/index.html'));
+});
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/pages/register.html'));
+});
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/pages/login.html'));
 });
 
 const connection = mysql.createConnection({
@@ -74,7 +80,7 @@ app.post('/register', async (req, res) => {
           return;
         }
         req.session.user = { userID: result.insertId, username, firstname: firstName, surname: familyName, email };
-        res.redirect('/pages/dashboard.html');
+        res.redirect('/dashboard');
       }
     );
   } catch (err) {
@@ -114,7 +120,7 @@ app.post('/login', async (req, res) => {
 
     req.session.user = { userID: user.userID, username: user.username, firstname: user.firstname, surname: user.surname, email: user.email };
     // Login successful then redirect to dashboard
-    res.redirect('/pages/dashboard.html');
+    res.redirect('/dashboard');
   });
 });
 
@@ -122,7 +128,7 @@ app.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) return res.status(500).json({ error: 'Logout failed' });
     res.clearCookie('connect.sid');
-    res.redirect('/pages/login.html');
+    res.redirect('/login');
   });
 });
 

@@ -115,7 +115,7 @@ async function fetchAndRender(){
   try {
     var response = await fetch(endpoint);
     if(response.status === 401){
-      window.location.href = '/pages/login.html';
+      window.location.href = '/login';
       return;
     }
     if(!response.ok) throw new Error('server returned ' + response.status);
