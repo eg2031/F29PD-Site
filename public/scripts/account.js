@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const res = await fetch('/api/account');
-    if (!res.ok) { window.location.href = '/pages/login.html'; return; }
+    if (!res.ok) { window.location.href = '/login'; return; }
     const user = await res.json();
 
     const container = document.querySelector('.container ul');
