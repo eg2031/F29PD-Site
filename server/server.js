@@ -42,7 +42,7 @@ app.post('/register', (req, res) => {
         return;
       }
       // Registration successful then redirect to login page
-      res.redirect('/pages/register.html');
+      res.redirect('/pages/login.html');
     }
   );
 });
