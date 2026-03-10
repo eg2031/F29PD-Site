@@ -124,6 +124,27 @@ app.post('/login', async (req, res) => {
   });
 });
 
+// delete account
+app.post('/delete-account', requireAuth, (req, res) => {
+
+  const userId = req.session.user.userID;
+  const sql = "DELETE FROM users WHERE userID = ?";
+
+  connection.query(sql, [userId], (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Failed to delete account");
+    }
+
+    req.session.destroy(() => {
+      res.clearCookie('connect.sid');
+      res.redirect('/register');
+    });
+  });
+
+});
+
+// logout
 app.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) return res.status(500).json({ error: 'Logout failed' });
