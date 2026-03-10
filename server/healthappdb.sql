@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 03, 2026 at 01:12 PM
+-- Generation Time: Mar 10, 2026 at 12:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,14 +24,41 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `userID` int(10) NOT NULL COMMENT 'PK',
+  `username` varchar(30) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `firstname` varchar(30) NOT NULL,
+  `surname` varchar(30) NOT NULL,
+  `dob` date NOT NULL,
+  `stepgoal` int(6) DEFAULT NULL,
+  `gpID` int(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`userID`, `username`, `password`, `email`, `firstname`, `surname`, `dob`, `stepgoal`, `gpID`) VALUES
+(1, 'jodfrey', 'testpassword', 'godfrey@jod.com', 'Ching Kong Godfrey', 'Lam', '2005-07-13', NULL, 1),
+(2, 'eg2031', 'testpass', 'eg2031@hw.ac.uk', 'Euan', 'G', '2005-01-15', NULL, 1),
+(3, 'user1', 'password', 'user1email@gmail.com', 'Test1', 'Test1', '2011-01-19', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `gpusers`
 --
 
 CREATE TABLE `gpusers` (
   `gpID` int(10) NOT NULL,
   `username` varchar(30) NOT NULL,
-  `email` varchar(50) NOT NULL COMMENT 'ADD EMAIL CONSTRAINTS',
-  `password` varchar(255) NOT NULL COMMENT 'HASHED PASSWORD',
+  `email` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `firstname` varchar(30) NOT NULL,
   `surname` varchar(30) NOT NULL,
   `centre` varchar(50) NOT NULL
@@ -67,17 +94,21 @@ INSERT INTO `isgp` (`userID`, `gpID`, `accepted`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `userrecords`
+-- Table structure for table `userRecords`
 --
 
-CREATE TABLE `userrecords` (
-  `userID` int(11) NOT NULL,
-  `avgSteps` int(11) NOT NULL,
-  `avgKcal` int(11) NOT NULL,
-  `avgRestHR` int(11) NOT NULL,
-  `avgActiveHR` int(11) NOT NULL,
-  `avgFluids` float NOT NULL,
-  `pbSteps` int(11) DEFAULT NULL
+CREATE TABLE `userRecords` (
+  `recordID` int(11) NOT NULL,
+  `userID` int(10) NOT NULL,
+  `date` date NOT NULL,
+  `calories` int(11) DEFAULT NULL,
+  `steps` int(11) DEFAULT NULL,
+  `fluidIntake` int(11) DEFAULT NULL,
+  `weight` float DEFAULT NULL,
+  `restHR` int(11) DEFAULT NULL,
+  `activeHR` int(11) DEFAULT NULL,
+  `systolicPressure` int(11) DEFAULT NULL,
+  `diastolicPressure` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -99,119 +130,58 @@ CREATE TABLE `userrelationships` (
 INSERT INTO `userrelationships` (`user1`, `user2`, `accepted`) VALUES
 (1, 2, 1);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `userID` int(10) NOT NULL COMMENT 'PK',
-  `username` varchar(30) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `email` varchar(50) NOT NULL COMMENT 'NEEDS CONSTRAINT ADDED',
-  `firstname` varchar(30) NOT NULL,
-  `surname` varchar(30) NOT NULL,
-  `dob` date NOT NULL COMMENT 'DOUBLE CHECK DATE FORMAT FOR QUERIES',
-  `weight` float DEFAULT NULL COMMENT 'WEIGHT IN KG, USER INPUT',
-  `stepcount` int(6) DEFAULT NULL COMMENT 'USER INPUTTED ',
-  `stepgoal` int(6) DEFAULT NULL COMMENT 'USER INPUT',
-  `gpID` int(10) DEFAULT NULL COMMENT 'FK (NEEDS ADDED)',
-  `kcal` int(5) DEFAULT NULL COMMENT 'RUNNING TOTAL OF USER INPUT',
-  `fluidIntake` int(5) DEFAULT NULL COMMENT 'USER INPUT',
-  `systolicPressure` int(11) DEFAULT NULL,
-  `diastolicPressure` int(11) DEFAULT NULL,
-  `bloodPressure` varchar(7) GENERATED ALWAYS AS (concat(`systolicPressure`,'/',`diastolicPressure`)) STORED
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`userID`, `username`, `password`, `email`, `firstname`, `surname`, `dob`, `weight`, `stepcount`, `stepgoal`, `gpID`, `kcal`, `fluidIntake`, `systolicPressure`, `diastolicPressure`) VALUES
-(1, 'jodfrey', 'testpassword', 'godfrey@jod.com', 'Ching Kong Godfrey', 'Lam', '2005-07-13', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
-(2, 'eg2031', 'testpass', 'eg2031@hw.ac.uk', 'Euan', 'G', '2005-01-15', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
-(3, 'user1', 'password', 'user1email@gmail.com', 'Test1', 'Test1', '2011-01-19', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-
 --
 -- Indexes for dumped tables
 --
 
---
--- Indexes for table `gpusers`
---
-ALTER TABLE `gpusers`
-  ADD PRIMARY KEY (`gpID`),
-  ADD UNIQUE KEY `username` (`username`),
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`userID`) USING BTREE,
   ADD UNIQUE KEY `email` (`email`);
 
---
--- Indexes for table `isgp`
---
+ALTER TABLE `gpusers`
+  ADD PRIMARY KEY (`gpID`),
+  ADD UNIQUE KEY `email` (`email`);
+
 ALTER TABLE `isgp`
   ADD KEY `idx_gpID` (`gpID`),
   ADD KEY `userID` (`userID`);
 
---
--- Indexes for table `userrecords`
---
-ALTER TABLE `userrecords`
-  ADD KEY `fk_userid` (`userID`);
+ALTER TABLE `userRecords`
+  ADD PRIMARY KEY (`recordID`),
+  ADD UNIQUE KEY `user_date` (`userID`, `date`);
 
---
--- Indexes for table `userrelationships`
---
 ALTER TABLE `userrelationships`
   ADD PRIMARY KEY (`user1`,`user2`),
   ADD KEY `fk_userid2` (`user2`);
 
 --
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`userID`) USING BTREE,
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `email` (`email`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
---
--- AUTO_INCREMENT for table `gpusers`
---
+ALTER TABLE `users`
+  MODIFY `userID` int(10) NOT NULL AUTO_INCREMENT COMMENT 'PK', AUTO_INCREMENT=4;
+
 ALTER TABLE `gpusers`
   MODIFY `gpID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `userID` int(10) NOT NULL AUTO_INCREMENT COMMENT 'PK', AUTO_INCREMENT=4;
+ALTER TABLE `userRecords`
+  MODIFY `recordID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
 --
 
---
--- Constraints for table `isgp`
---
 ALTER TABLE `isgp`
   ADD CONSTRAINT `fk_isgp_gp` FOREIGN KEY (`gpID`) REFERENCES `gpusers` (`gpID`),
   ADD CONSTRAINT `fk_isgp_user` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`);
 
---
--- Constraints for table `userrecords`
---
-ALTER TABLE `userrecords`
-  ADD CONSTRAINT `fk_userid` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`);
+ALTER TABLE `userRecords`
+  ADD CONSTRAINT `fk_daily_user` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`);
 
---
--- Constraints for table `userrelationships`
---
 ALTER TABLE `userrelationships`
   ADD CONSTRAINT `fk_userid1` FOREIGN KEY (`user1`) REFERENCES `users` (`userID`),
   ADD CONSTRAINT `fk_userid2` FOREIGN KEY (`user2`) REFERENCES `users` (`userID`);
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
