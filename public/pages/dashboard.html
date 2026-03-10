@@ -1,6 +1,5 @@
 <!doctype html>
 <html>
-  <script src="../scripts/auth.js"></script>
   <head>
     <meta charset="utf-8" />
     <meta name="generator" content="GitLab Pages" />
@@ -18,7 +17,6 @@
       src="https://kit.fontawesome.com/f06588c779.js"
       crossorigin="anonymous"
     ></script>
-    <script src="../scripts/dashboard.js"></script>
   </head>
   <body>
     <nav class="flexAlign">
@@ -81,45 +79,59 @@
       <div class="row 2">
         <div class="column container">
           <h1 class="containerTitle">Record Daily Data</h1>
-          <div class="row">
-            <div class="flexAlign column dropdown">
-              <button onclick="dropDown()" class="dropdownButton">Other Stats</button>
-              <div id="myDropdown" class="dropdown-content">
-                <a onclick="displayEntryBox('caloriesForm')">Calories</a>
-                <a onclick="displayEntryBox('stepsForm')">Steps</a>
-                <a onclick="displayEntryBox('fluidIntakeForm')">Fluid Intake</a>
-              </div>
+          <div class="dataEntrySection">
+            <div class="datePickerRow">
+              <label for="recordDate">Date:</label>
+              <input type="date" id="recordDate" />
             </div>
-            <form id="caloriesForm" class="flexAlign dataForm column shown">
-              <label for="calories">Calories:</label>
-              <input
-                type="number"
-                id="calories"
-                placeholder="1000"
-                min="1"
-              /><br />
-              <input type="submit" value="Submit" />
-            </form>
-            <form id="stepsForm" class="flexAlign dataForm column shown">
-              <label for="steps">Steps:</label>
-              <input
-                type="number"
-                id="steps"
-                placeholder="10,000"
-                min="1"
-              /><br />
-              <input type="submit" value="Submit" />
-            </form>
-            <form id="fluidIntakeForm" class="flexAlign dataForm column shown">
-              <label for="fluidIntake">Fluid intake (ml):</label>
-              <input
-                type="number"
-                id="fluidIntake"
-                placeholder="10,000"
-                min="1"
-              /><br />
-              <input type="submit" value="Submit" />
-            </form>
+            <div class="statTabs">
+              <button class="statTab active" data-form="caloriesForm">Calories</button>
+              <button class="statTab" data-form="stepsForm">Steps</button>
+              <button class="statTab" data-form="fluidIntakeForm">Fluid Intake</button>
+              <button class="statTab" data-form="weightForm">Weight</button>
+              <button class="statTab" data-form="restHRForm">Rest HR</button>
+              <button class="statTab" data-form="activeHRForm">Active HR</button>
+              <button class="statTab" data-form="bpForm">Blood Pressure</button>
+            </div>
+            <div class="formArea">
+              <form id="caloriesForm" class="flexAlign dataForm active">
+                <label for="calories">Calories:</label>
+                <input type="number" id="calories" placeholder="1000" min="1" />
+                <input type="submit" value="Submit" />
+              </form>
+              <form id="stepsForm" class="flexAlign dataForm">
+                <label for="steps">Steps:</label>
+                <input type="number" id="steps" placeholder="10000" min="1" />
+                <input type="submit" value="Submit" />
+              </form>
+              <form id="fluidIntakeForm" class="flexAlign dataForm">
+                <label for="fluidIntake">Fluid intake (ml):</label>
+                <input type="number" id="fluidIntake" placeholder="3000" min="1" />
+                <input type="submit" value="Submit" />
+              </form>
+              <form id="weightForm" class="flexAlign dataForm">
+                <label for="weight">Weight (kg):</label>
+                <input type="number" id="weight" placeholder="70" min="1" step="0.1" />
+                <input type="submit" value="Submit" />
+              </form>
+              <form id="restHRForm" class="flexAlign dataForm">
+                <label for="restHR">Resting heart rate (bpm):</label>
+                <input type="number" id="restHR" placeholder="70" min="1" />
+                <input type="submit" value="Submit" />
+              </form>
+              <form id="activeHRForm" class="flexAlign dataForm">
+                <label for="activeHR">Active heart rate (bpm):</label>
+                <input type="number" id="activeHR" placeholder="120" min="1" />
+                <input type="submit" value="Submit" />
+              </form>
+              <form id="bpForm" class="flexAlign dataForm">
+                <label for="systolic">Systolic:</label>
+                <input type="number" id="systolic" placeholder="120" min="1" />
+                <label for="diastolic">Diastolic:</label>
+                <input type="number" id="diastolic" placeholder="80" min="1" />
+                <input type="submit" value="Submit" />
+              </form>
+            </div>
           </div>
         </div>
         <div class="column container leaderboard">
@@ -144,5 +156,7 @@
         </div>
       </div>
     </div>
+    <script src="../scripts/auth.js"></script>
+    <script src="../scripts/dashboard.js"></script>
   </body>
 </html>
