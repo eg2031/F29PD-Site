@@ -108,7 +108,7 @@ INSERT INTO `userrelationships` (`user1`, `user2`, `accepted`) VALUES
 CREATE TABLE `users` (
   `userID` int(10) NOT NULL COMMENT 'PK',
   `username` varchar(30) NOT NULL,
-  `password` varchar(30) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `email` varchar(50) NOT NULL COMMENT 'NEEDS CONSTRAINT ADDED',
   `firstname` varchar(30) NOT NULL,
   `surname` varchar(30) NOT NULL,
