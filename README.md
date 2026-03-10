@@ -37,6 +37,9 @@ Open a new terminal window and enter the following commands:
 This installs:
 - mysql2
 - dotenv
+- express (framework/routing)
+- bcrypt (hashing)
+- express-session (session mdiddleware)
 
 3) Create Environment File
 
@@ -50,6 +53,7 @@ Add the following inside:
     DB_USER=root
     DB_PASS=rootpassword
     DB_NAME=healthappdb
+    SESSION_SECRET= anyrandomstring
 
 IMPORTANT:
 - Do NOT commit the .env file
