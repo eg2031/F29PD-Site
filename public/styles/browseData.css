@@ -26,13 +26,13 @@ ul {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: rgb(100, 100, 100);
+  color: var(--CustomDarkGrey);
 }
 
 .filterGroup input[type="date"] {
   padding: 8px 12px;
   border-radius: 10px 0px;
-  border: 2px solid rgb(150, 150, 150);
+  border: 2px solid var(--CustomLightGrey);
   background-color: white;
   color: black;
 }
@@ -46,7 +46,7 @@ ul {
   padding: 8px 16px;
   border: none;
   border-radius: 10px 0px;
-  background-color: rgb(168, 230, 98);
+  background-color: var(--CustomGreen);
   cursor: pointer;
   color: black;
 }
@@ -59,13 +59,13 @@ ul {
   padding: 8px 20px;
   border: none;
   border-radius: 10px 0px;
-  background-color: rgb(100, 100, 100);
+  background-color: var(--CustomDarkGrey);
   color: white;
   cursor: pointer;
 }
 
 .applyBtn:hover {
-  background-color: rgb(70, 70, 70);
+  background-color: var(--CustomDarkGrey);
 }
 
 .metricToggles {
@@ -140,7 +140,7 @@ ul {
 }
 
 .summaryCard h2 {
-  background-color: rgb(100, 100, 100);
+  background-color: var(--CustomDarkGrey);
   padding: 0.3rem;
   margin: 0 0 0.5rem 0;
 }

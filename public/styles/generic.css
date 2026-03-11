@@ -1,6 +1,7 @@
 :root {
   --CustomLightGrey: rgb(150, 150, 150);
-  --CustomDarkGrey: rgb(100, 100, 100);
+  --CustomDarkGrey: rgb(50, 50, 50);
+  --CustomGreen: rgb(168, 230, 98);
 }
 
 .flexAlign {
@@ -30,7 +31,7 @@ body {
 }
 
 nav {
-  background-color: rgb(168, 230, 98);
+  background-color: var(--CustomGreen);
 }
 
 .nav-left,
