@@ -50,7 +50,7 @@ nav {
   justify-content: flex-end;
 }
 
-nav a {
+nav a,button {
   text-decoration: none;
   color: var(--CustomDarkGrey);
   border: 5px inset rgb(50, 200, 50);
@@ -84,8 +84,8 @@ nav p {
 }
 
 .containerTitle {
-  background-color: var(--CustomDarkGrey);
   text-align: center;
+  color: var(--CustomDarkGrey);
 }
 
 .mainContainer {
@@ -104,4 +104,8 @@ img {
 
 .imageContainer {
   justify-content: center;
+}
+
+.logoImage {
+  width: 30vw;
 }
