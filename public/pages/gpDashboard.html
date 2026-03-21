@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="GitLab Pages" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="../styles/generic.css" />
+  <link rel="stylesheet" href="../styles/dashboard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+          href="https://fonts.googleapis.com/css2?family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+          rel="stylesheet"
+  />
+  <script
+          src="https://kit.fontawesome.com/f06588c779.js"
+          crossorigin="anonymous"
+  ></script>
+</head>
+<body>
+<nav class="flexAlign">
+  <div class="nav-left">
+    <a href="register">register</a>
+    <a href="login">login</a>
+    <a href="browseData">browseData</a>
+  </div>
+  <div class="nav-center">
+    <a href="/" class="fa-2x"><p>TracFit</p></a>
+  </div>
+  <div class="nav-right">
+    <a href="gpDashboard"><i class="fa-3x fa-regular fa-house"></i></a>
+    <a href="account"><i class="fa-3x fa-regular fa-user"></i></a>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="row">
+    <div class="column container">
+      <h1 class="containerTitle">My Patients</h1>
+      <div id="patientList">
+        <p>Loading patients...</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../scripts/auth.js"></script>
+<script src="../scripts/gpDashboard.js"></script>
+</body>
+</html>

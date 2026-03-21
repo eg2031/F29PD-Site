@@ -6,6 +6,9 @@ const path = require('path');
 router.get('/gpLogin', (req, res) => {
     res.sendFile(path.join(__dirname, '../../public/pages/gpLogin.html'));
 });
+router.get('/gpDashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../public/pages/gpDashboard.html'));
+});
 
 router.post('/gpLogin', async (req, res) => {
     const { email, password } = req.body;
@@ -20,13 +23,35 @@ router.post('/gpLogin', async (req, res) => {
         const gp = results[0];
 
         // password check
-        if (password !== gp.password) return res.send("Incorrect password");
-        else {
-
+        if (password === gp.password) {
             req.session.user = {gpID: gp.gpID, username: gp.username, email: gp.email, isGP: true};
-            return res.send("Login confirmed")
+            res.redirect('/gpDashboard')
         }
-        //res.redirect('/dashboard');
+
+        else {
+            return res.send("Incorrect password");
+
+        }
+    });
+});
+
+router.get('/api/patients', (req, res) => {
+    if (!req.session.user || !req.session.user.isGP) {
+        return res.status(401).json({ error: 'Unauthorised' });
+    }
+
+    const gpID = req.session.user.gpID;
+
+    const sql = `
+        SELECT u.userID, u.username, u.firstname, u.surname, u.email, u.dob, i.accepted
+        FROM users u
+                 JOIN isgp i ON u.userID = i.userID
+        WHERE i.gpID = ? AND i.accepted = 1
+    `;
+
+    req.db.query(sql, [gpID], (err, results) => {
+        if (err) return res.status(500).json({ error: err.sqlMessage });
+        res.json(results);
     });
 });
 
