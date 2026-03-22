@@ -308,6 +308,29 @@ app.post('/api/friends/request', requireAuth, (req, res) => {
   });
 });
 
+// get pending friend requests sent to current user
+app.get('/api/friends/requests', requireAuth, (req, res) => {
+  const currentUserId = req.session.user.userID;
+
+  const sql = `
+    SELECT ur.user1 AS userID, u.username, u.firstname, u.surname, u.email
+    FROM userrelationships ur
+    JOIN users u ON u.userID = ur.user1
+    WHERE ur.user2 = ?
+      AND ur.accepted = 0
+  `;
+
+  connection.query(sql, [currentUserId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to fetch requests' });
+    }
+
+    res.json(results);
+  });
+});
+
+
 app.listen(8081, () => {
   console.log("Server running at http://127.0.0.1:8081/");
 });
