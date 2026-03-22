@@ -38,6 +38,10 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/pages/login.html'));
 });
 
+app.use((req, res, next) => { req.db = connection; next(); });
+const gpRoutes = require('./routes/gp');
+app.use('/', gpRoutes);
+
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
