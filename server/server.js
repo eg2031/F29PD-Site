@@ -330,6 +330,60 @@ app.get('/api/friends/requests', requireAuth, (req, res) => {
   });
 });
 
+// accept friend request
+app.post('/api/friends/accept', requireAuth, (req, res) => {
+  const currentUserId = req.session.user.userID;
+  const requesterUserId = parseInt(req.body.requesterUserId, 10);
+
+  if (!requesterUserId) {
+    return res.status(400).json({ error: 'requesterUserId required' });
+  }
+
+  const sql = `
+    UPDATE userrelationships
+    SET accepted = 1
+    WHERE user1 = ? AND user2 = ? AND accepted = 0
+  `;
+
+  connection.query(sql, [requesterUserId, currentUserId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to accept request' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'No pending request found' });
+    }
+
+    res.json({ success: true });
+  });
+});
+
+// get accepted friends
+app.get('/api/friends', requireAuth, (req, res) => {
+  const currentUserId = req.session.user.userID;
+
+  const sql = `
+    SELECT u.userID, u.username, u.firstname, u.surname, u.email
+    FROM userrelationships ur
+    JOIN users u
+      ON (
+        (ur.user1 = ? AND ur.user2 = u.userID)
+        OR
+        (ur.user2 = ? AND ur.user1 = u.userID)
+      )
+    WHERE ur.accepted = 1
+  `;
+
+  connection.query(sql, [currentUserId, currentUserId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to fetch friends' });
+    }
+
+    res.json(results);
+  });
+});
 
 app.listen(8081, () => {
   console.log("Server running at http://127.0.0.1:8081/");
