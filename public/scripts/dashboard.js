@@ -104,3 +104,161 @@ function setupBPForm(){
     }
   });
 }
+
+async function loadLeaderboard() {
+  const tbody = document.getElementById('leaderboardBody');
+  if (!tbody) return;
+
+  try {
+    const res = await fetch('/api/leaderboard', { credentials: 'same-origin' });
+    const data = await res.json();
+
+    tbody.innerHTML = '';
+
+    if (!data.length) {
+      tbody.innerHTML = '<tr><td colspan="3">No leaderboard data yet.</td></tr>';
+      return;
+    }
+
+    data.forEach((user, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${user.firstname} ${user.surname} (@${user.username})</td>
+        <td>${user.steps || 0}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML = '<tr><td colspan="3">Failed to load leaderboard.</td></tr>';
+  }
+}
+
+async function searchUsers() {
+  const input = document.getElementById('friendSearchInput');
+  const resultsBox = document.getElementById('friendSearchResults');
+  if (!input || !resultsBox) return;
+
+  const q = input.value.trim();
+  if (!q) {
+    resultsBox.innerHTML = '<p>Enter a username or email.</p>';
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/users/search?q=${encodeURIComponent(q)}`, {
+      credentials: 'same-origin'
+    });
+
+    const users = await res.json();
+    resultsBox.innerHTML = '';
+
+    if (!users.length) {
+      resultsBox.innerHTML = '<p>No users found.</p>';
+      return;
+    }
+
+    users.forEach((user) => {
+      const div = document.createElement('div');
+      div.className = 'friend-result';
+      div.innerHTML = `
+        <span>${user.firstname} ${user.surname} (@${user.username})</span>
+        <button type="button" data-userid="${user.userID}">Add Friend</button>
+      `;
+
+      div.querySelector('button').addEventListener('click', async () => {
+        try {
+          const reqRes = await fetch('/api/friends/request', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ targetUserId: user.userID })
+          });
+
+          const result = await reqRes.json();
+
+          if (!reqRes.ok) {
+            alert(result.error || 'Failed to send friend request');
+            return;
+          }
+
+          alert('Friend request sent');
+        } catch (error) {
+          console.error(error);
+          alert('Failed to send friend request');
+        }
+      });
+
+      resultsBox.appendChild(div);
+    });
+  } catch (err) {
+    console.error(err);
+    resultsBox.innerHTML = '<p>Search failed.</p>';
+  }
+}
+
+async function loadPendingRequests() {
+  const box = document.getElementById('pendingRequests');
+  if (!box) return;
+
+  try {
+    const res = await fetch('/api/friends/requests', { credentials: 'same-origin' });
+    const requests = await res.json();
+
+    box.innerHTML = '';
+
+    if (!requests.length) {
+      box.innerHTML = '<p>No pending requests.</p>';
+      return;
+    }
+
+    requests.forEach((user) => {
+      const div = document.createElement('div');
+      div.className = 'pending-request';
+      div.innerHTML = `
+        <span>${user.firstname} ${user.surname} (@${user.username})</span>
+        <button type="button">Accept</button>
+      `;
+
+      div.querySelector('button').addEventListener('click', async () => {
+        try {
+          const acceptRes = await fetch('/api/friends/accept', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ requesterUserId: user.userID })
+          });
+
+          const result = await acceptRes.json();
+
+          if (!acceptRes.ok) {
+            alert(result.error || 'Failed to accept request');
+            return;
+          }
+
+          await loadPendingRequests();
+          await loadLeaderboard();
+        } catch (error) {
+          console.error(error);
+          alert('Failed to accept request');
+        }
+      });
+
+      box.appendChild(div);
+    });
+  } catch (err) {
+    console.error(err);
+    box.innerHTML = '<p>Failed to load requests.</p>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const searchBtn = document.getElementById('friendSearchBtn');
+  if (searchBtn) {
+    searchBtn.addEventListener('click', searchUsers);
+  }
+
+  loadPendingRequests();
+  loadLeaderboard();
+});
