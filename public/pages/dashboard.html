@@ -132,23 +132,32 @@
           </div>
         </div>
         <div class="column container leaderboard">
-          <h1 class="containerTitle">Leaderboard</h1>
+          <h1 class="containerTitle">Friends Leaderboard</h1>
+
+          <div class="friendActions">
+            <input type="text" id="friendSearchInput" placeholder="Search username/email" />
+            <button id="friendSearchBtn" type="button">Find Users</button>
+          </div>
+
+          <div id="friendSearchResults"></div>
+
+          <h2>Pending Requests</h2>
+          <div id="pendingRequests"></div>
+
+          <h2>Leaderboard</h2>
           <table>
-            <tr>
-              <th>Company</th>
-              <th>Contact</th>
-              <th>Country</th>
-            </tr>
-            <tr>
-              <td>Alfreds Futterkiste</td>
-              <td>Maria Anders</td>
-              <td>Germany</td>
-            </tr>
-            <tr>
-              <td>Centro comercial Moctezuma</td>
-              <td>Francisco Chang</td>
-              <td>Mexico</td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>User</th>
+                <th>Steps Today</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+              <tr>
+                <td colspan="3">Loading...</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>

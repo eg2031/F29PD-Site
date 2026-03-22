@@ -128,6 +128,27 @@ app.post('/login', async (req, res) => {
   });
 });
 
+// delete account
+app.post('/delete-account', requireAuth, (req, res) => {
+
+  const userId = req.session.user.userID;
+  const sql = "DELETE FROM users WHERE userID = ?";
+
+  connection.query(sql, [userId], (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Failed to delete account");
+    }
+
+    req.session.destroy(() => {
+      res.clearCookie('connect.sid');
+      res.redirect('/register');
+    });
+  });
+
+});
+
+// logout
 app.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) return res.status(500).json({ error: 'Logout failed' });
@@ -208,6 +229,196 @@ app.get('/api/user-records', requireAuth, (req,res) => {
       });
     }
     res.json(out);
+  });
+});
+
+// find users to add as friends
+app.get('/api/users/search', requireAuth, (req, res) => {
+  const q = (req.query.q || '').trim();
+  const currentUserId = req.session.user.userID;
+
+  if (!q) return res.json([]);
+
+  const sql = `
+    SELECT userID, username, firstname, surname, email
+    FROM users
+    WHERE userID != ?
+      AND (
+        username LIKE ?
+        OR email LIKE ?
+        OR firstname LIKE ?
+        OR surname LIKE ?
+      )
+    LIMIT 10
+  `;
+
+  const like = `%${q}%`;
+
+  connection.query(sql, [currentUserId, like, like, like, like], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to search users' });
+    }
+    res.json(results);
+  });
+});
+
+// send friend request
+app.post('/api/friends/request', requireAuth, (req, res) => {
+  const currentUserId = req.session.user.userID;
+  const targetUserId = parseInt(req.body.targetUserId, 10);
+
+  if (!targetUserId) {
+    return res.status(400).json({ error: 'targetUserId required' });
+  }
+
+  if (currentUserId === targetUserId) {
+    return res.status(400).json({ error: 'You cannot add yourself' });
+  }
+  const checkSql = `
+    SELECT *
+    FROM userrelationships
+    WHERE (user1 = ? AND user2 = ?)
+       OR (user1 = ? AND user2 = ?)
+  `;
+
+  connection.query(checkSql, [currentUserId, targetUserId, targetUserId, currentUserId], (err, rows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to check relationship' });
+    }
+
+    if (rows.length > 0) {
+      return res.status(409).json({ error: 'Friend request or friendship already exists' });
+    }
+
+    const insertSql = `
+      INSERT INTO userrelationships (user1, user2, accepted)
+      VALUES (?, ?, 0)
+    `;
+
+    connection.query(insertSql, [currentUserId, targetUserId], (insertErr) => {
+      if (insertErr) {
+        console.error(insertErr);
+        return res.status(500).json({ error: 'Failed to send request' });
+      }
+
+      res.json({ success: true });
+    });
+  });
+});
+
+// get pending friend requests sent to current user
+app.get('/api/friends/requests', requireAuth, (req, res) => {
+  const currentUserId = req.session.user.userID;
+
+  const sql = `
+    SELECT ur.user1 AS userID, u.username, u.firstname, u.surname, u.email
+    FROM userrelationships ur
+    JOIN users u ON u.userID = ur.user1
+    WHERE ur.user2 = ?
+      AND ur.accepted = 0
+  `;
+
+  connection.query(sql, [currentUserId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to fetch requests' });
+    }
+
+    res.json(results);
+  });
+});
+
+// accept friend request
+app.post('/api/friends/accept', requireAuth, (req, res) => {
+  const currentUserId = req.session.user.userID;
+  const requesterUserId = parseInt(req.body.requesterUserId, 10);
+
+  if (!requesterUserId) {
+    return res.status(400).json({ error: 'requesterUserId required' });
+  }
+
+  const sql = `
+    UPDATE userrelationships
+    SET accepted = 1
+    WHERE user1 = ? AND user2 = ? AND accepted = 0
+  `;
+
+  connection.query(sql, [requesterUserId, currentUserId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to accept request' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'No pending request found' });
+    }
+
+    res.json({ success: true });
+  });
+});
+
+// get accepted friends
+app.get('/api/friends', requireAuth, (req, res) => {
+  const currentUserId = req.session.user.userID;
+
+  const sql = `
+    SELECT u.userID, u.username, u.firstname, u.surname, u.email
+    FROM userrelationships ur
+    JOIN users u
+      ON (
+        (ur.user1 = ? AND ur.user2 = u.userID)
+        OR
+        (ur.user2 = ? AND ur.user1 = u.userID)
+      )
+    WHERE ur.accepted = 1
+  `;
+
+  connection.query(sql, [currentUserId, currentUserId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to fetch friends' });
+    }
+
+    res.json(results);
+  });
+});
+
+// leaderboard: current user + accepted friends ranked by today's steps
+app.get('/api/leaderboard', requireAuth, (req, res) => {
+  const currentUserId = req.session.user.userID;
+  const date = req.query.date || new Date().toISOString().split('T')[0];
+
+  const sql = `
+    SELECT
+      u.userID,
+      u.username,
+      u.firstname,
+      u.surname,
+      COALESCE(urc.steps, 0) AS steps
+    FROM users u
+    LEFT JOIN userRecords urc
+      ON u.userID = urc.userID AND urc.date = ?
+    WHERE u.userID = ?
+       OR u.userID IN (
+          SELECT CASE
+            WHEN ur.user1 = ? THEN ur.user2
+            ELSE ur.user1
+          END AS friendID
+          FROM userrelationships ur
+          WHERE (ur.user1 = ? OR ur.user2 = ?)
+            AND ur.accepted = 1
+       )
+    ORDER BY steps DESC, u.username ASC
+  `;
+  connection.query(sql, [date, currentUserId, currentUserId, currentUserId, currentUserId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to fetch leaderboard' });
+    }
+
+    res.json(results);
   });
 });
 
