@@ -232,6 +232,38 @@ app.get('/api/user-records', requireAuth, (req,res) => {
   });
 });
 
+// find users to add as friends
+app.get('/api/users/search', requireAuth, (req, res) => {
+  const q = (req.query.q || '').trim();
+  const currentUserId = req.session.user.userID;
+
+  if (!q) return res.json([]);
+
+  const sql = `
+    SELECT userID, username, firstname, surname, email
+    FROM users
+    WHERE userID != ?
+      AND (
+        username LIKE ?
+        OR email LIKE ?
+        OR firstname LIKE ?
+        OR surname LIKE ?
+      )
+    LIMIT 10
+  `;
+
+  const like = `%${q}%`;
+
+  connection.query(sql, [currentUserId, like, like, like, like], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to search users' });
+    }
+    res.json(results);
+  });
+});
+
+
 app.listen(8081, () => {
   console.log("Server running at http://127.0.0.1:8081/");
 });
