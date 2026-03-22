@@ -385,6 +385,43 @@ app.get('/api/friends', requireAuth, (req, res) => {
   });
 });
 
+// leaderboard: current user + accepted friends ranked by today's steps
+app.get('/api/leaderboard', requireAuth, (req, res) => {
+  const currentUserId = req.session.user.userID;
+  const date = req.query.date || new Date().toISOString().split('T')[0];
+
+  const sql = `
+    SELECT
+      u.userID,
+      u.username,
+      u.firstname,
+      u.surname,
+      COALESCE(urc.steps, 0) AS steps
+    FROM users u
+    LEFT JOIN userRecords urc
+      ON u.userID = urc.userID AND urc.date = ?
+    WHERE u.userID = ?
+       OR u.userID IN (
+          SELECT CASE
+            WHEN ur.user1 = ? THEN ur.user2
+            ELSE ur.user1
+          END AS friendID
+          FROM userrelationships ur
+          WHERE (ur.user1 = ? OR ur.user2 = ?)
+            AND ur.accepted = 1
+       )
+    ORDER BY steps DESC, u.username ASC
+  `;
+  connection.query(sql, [date, currentUserId, currentUserId, currentUserId, currentUserId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to fetch leaderboard' });
+    }
+
+    res.json(results);
+  });
+});
+
 app.listen(8081, () => {
   console.log("Server running at http://127.0.0.1:8081/");
 });
