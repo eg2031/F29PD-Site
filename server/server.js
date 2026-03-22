@@ -263,6 +263,50 @@ app.get('/api/users/search', requireAuth, (req, res) => {
   });
 });
 
+// send friend request
+app.post('/api/friends/request', requireAuth, (req, res) => {
+  const currentUserId = req.session.user.userID;
+  const targetUserId = parseInt(req.body.targetUserId, 10);
+
+  if (!targetUserId) {
+    return res.status(400).json({ error: 'targetUserId required' });
+  }
+
+  if (currentUserId === targetUserId) {
+    return res.status(400).json({ error: 'You cannot add yourself' });
+  }
+  const checkSql = `
+    SELECT *
+    FROM userrelationships
+    WHERE (user1 = ? AND user2 = ?)
+       OR (user1 = ? AND user2 = ?)
+  `;
+
+  connection.query(checkSql, [currentUserId, targetUserId, targetUserId, currentUserId], (err, rows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to check relationship' });
+    }
+
+    if (rows.length > 0) {
+      return res.status(409).json({ error: 'Friend request or friendship already exists' });
+    }
+
+    const insertSql = `
+      INSERT INTO userrelationships (user1, user2, accepted)
+      VALUES (?, ?, 0)
+    `;
+
+    connection.query(insertSql, [currentUserId, targetUserId], (insertErr) => {
+      if (insertErr) {
+        console.error(insertErr);
+        return res.status(500).json({ error: 'Failed to send request' });
+      }
+
+      res.json({ success: true });
+    });
+  });
+});
 
 app.listen(8081, () => {
   console.log("Server running at http://127.0.0.1:8081/");
