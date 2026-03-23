@@ -55,4 +55,35 @@ router.get('/api/patients', (req, res) => {
     });
 });
 
+router.get('/gpPatient', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../public/pages/gpPatient.html'));
+});
+
+router.get('/api/patient/:userID', (req, res) => {
+    if (!req.session.user || !req.session.user.isGP) {
+        return res.status(401).json({ error: 'Unauthorised' });
+    }
+
+    const { userID } = req.params;
+    const gpID = req.session.user.gpID;
+
+    // Make sure this patient actually belongs to this GP
+    const sql = `
+        SELECT u.firstname, u.surname, u.email, u.dob, u.stepgoal,
+               r.date, r.calories, r.steps, r.fluidIntake, r.weight,
+               r.restHR, r.activeHR, r.systolicPressure, r.diastolicPressure
+        FROM users u
+        JOIN isgp i ON u.userID = i.userID
+        LEFT JOIN userRecords r ON u.userID = r.userID
+        WHERE u.userID = ? AND i.gpID = ? AND i.accepted = 1
+        ORDER BY r.date DESC
+    `;
+
+    req.db.query(sql, [userID, gpID], (err, results) => {
+        if (err) return res.status(500).json({ error: err.sqlMessage });
+        if (results.length === 0) return res.status(404).json({ error: 'Patient not found' });
+        res.json(results);
+    });
+});
+
 module.exports = router;

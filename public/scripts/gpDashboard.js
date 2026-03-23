@@ -14,13 +14,26 @@ async function loadPatients() {
         return;
     }
 
-    container.innerHTML = patients.map(p => `
-        <div class="patient-card">
-            <p><strong>${p.firstname} ${p.surname}</strong></p>
-            <p>${p.email}</p>
-            <p>DOB: ${new Date(p.dob).toLocaleDateString('en-GB')}</p>
-        </div>
-    `).join('');
+    container.innerHTML = `
+    <table class="patient-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>DOB</th>
+            </tr>
+        </thead>
+        <tbody>
+${patients.map(p => `
+    <tr class="patient-row" onclick="window.location.href='/gpPatient?userID=${p.userID}'">
+        <td>${p.firstname} ${p.surname}</td>
+        <td>${p.email}</td>
+        <td>${new Date(p.dob).toLocaleDateString('en-GB')}</td>
+    </tr>
+`).join('')}
+        </tbody>
+    </table>
+`;
 }
 
 loadPatients();
