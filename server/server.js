@@ -422,6 +422,35 @@ app.get('/api/leaderboard', requireAuth, (req, res) => {
   });
 });
 
+// Search for a GP practice
+app.get('/api/gp/search', requireAuth, (req, res) => {
+  const { centre } = req.query;
+  const sql = `SELECT gpID, firstname, surname, centre FROM gpusers WHERE centre LIKE ?`;
+
+  connection.query(sql, [`%${centre}%`], (err, results) => {
+    if (err) return res.status(500).json({ error: err.sqlMessage });
+    res.json(results);
+  });
+});
+
+// Request to join a GP practice
+app.post('/api/gp/join', requireAuth, (req, res) => {
+  const { gpID } = req.body;
+  const userID = req.session.user.userID;
+
+  const checkSql = `SELECT * FROM isgp WHERE userID = ? AND gpID = ?`;
+  connection.query(checkSql, [userID, gpID], (err, results) => {
+    if (err) return res.status(500).json({ error: err.sqlMessage });
+    if (results.length > 0) return res.status(400).json({ error: 'Already requested or joined this practice' });
+
+    const sql = `INSERT INTO isgp (userID, gpID, accepted) VALUES (?, ?, 0)`;
+    connection.query(sql, [userID, gpID], (err) => {
+      if (err) return res.status(500).json({ error: err.sqlMessage });
+      res.json({ success: true });
+    });
+  });
+});
+
 app.listen(8081, () => {
   console.log("Server running at http://127.0.0.1:8081/");
 });
