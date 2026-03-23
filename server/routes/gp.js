@@ -86,4 +86,57 @@ router.get('/api/patient/:userID', (req, res) => {
     });
 });
 
+/* api section to allow GPs to accept new patients */
+// Get pending requests
+router.get('/api/gp/pending', (req, res) => {
+    if (!req.session.user || !req.session.user.isGP) {
+        return res.status(401).json({ error: 'Unauthorised' });
+    }
+
+    const gpID = req.session.user.gpID;
+    const sql = `
+        SELECT u.userID, u.firstname, u.surname, u.email
+        FROM users u
+        JOIN isgp i ON u.userID = i.userID
+        WHERE i.gpID = ? AND i.accepted = 0
+    `;
+
+    req.db.query(sql, [gpID], (err, results) => {
+        if (err) return res.status(500).json({ error: err.sqlMessage });
+        res.json(results);
+    });
+});
+
+// Accept a request
+router.post('/api/gp/accept', (req, res) => {
+    if (!req.session.user || !req.session.user.isGP) {
+        return res.status(401).json({ error: 'Unauthorised' });
+    }
+
+    const gpID = req.session.user.gpID;
+    const { userID } = req.body;
+
+    const sql = `UPDATE isgp SET accepted = 1 WHERE userID = ? AND gpID = ?`;
+    req.db.query(sql, [userID, gpID], (err) => {
+        if (err) return res.status(500).json({ error: err.sqlMessage });
+        res.json({ success: true });
+    });
+});
+
+// Reject a request
+router.post('/api/gp/reject', (req, res) => {
+    if (!req.session.user || !req.session.user.isGP) {
+        return res.status(401).json({ error: 'Unauthorised' });
+    }
+
+    const gpID = req.session.user.gpID;
+    const { userID } = req.body;
+
+    const sql = `DELETE FROM isgp WHERE userID = ? AND gpID = ?`;
+    req.db.query(sql, [userID, gpID], (err) => {
+        if (err) return res.status(500).json({ error: err.sqlMessage });
+        res.json({ success: true });
+    });
+});
+
 module.exports = router;
