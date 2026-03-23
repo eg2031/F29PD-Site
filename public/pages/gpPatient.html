@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patient Details</title>
+    <link rel="stylesheet" href="../styles/generic.css" />
+    <link rel="stylesheet" href="../styles/dashboard.css" />
+</head>
+<body>
+<nav class="flexAlign">
+    <div class="nav-left"></div>
+    <div class="nav-center">
+        <a href="/" class="fa-2x"><p>TracFit</p></a>
+    </div>
+    <div class="nav-right">
+        <a href="gpDashboard"><i class="fa-3x fa-regular fa-house"></i></a>
+    </div>
+</nav>
+
+<div class="main">
+    <div class="row">
+        <div class="column container">
+            <h1 id="patientName">Loading...</h1>
+            <div id="patientInfo"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column container">
+            <h2 class="containerTitle">Health Records</h2>
+            <div id="healthRecords"><p>Loading...</p></div>
+        </div>
+    </div>
+</div>
+<script src="../scripts/auth.js"></script>
+<script src="../scripts/gpPatient.js"></script>
+</body>
+</html>
