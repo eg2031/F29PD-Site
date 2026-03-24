@@ -21,7 +21,6 @@ async function loadPatient() {
     document.getElementById('patientInfo').innerHTML = `
         <p><strong>Email:</strong> ${p.email}</p>
         <p><strong>DOB:</strong> ${new Date(p.dob).toLocaleDateString('en-GB')}</p>
-        <p><strong>Step Goal:</strong> ${p.stepgoal ?? 'Not set'}</p>
     `;
 
     // Health records table

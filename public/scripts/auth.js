@@ -8,11 +8,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+/* Create nav bar, nav bar is different for users and GP users */
 function updateNav(loggedIn, user) {
   const navLeft = document.querySelector('.nav-left');
   if (!navLeft) return;
 
-  if (loggedIn) {
+  if (loggedIn && user.isGP) {
+    navLeft.innerHTML = `
+      <form action="/logout" method="POST" style="display:inline;margin:0;padding:0;">
+        <button type="submit" class="nav-logout-btn">Logout</button>
+      </form>
+    `;
+  } else if (loggedIn) {
     navLeft.innerHTML = `
       <a href="dashboard">Dashboard</a>
       <a href="browseData">My Data</a>
