@@ -16,6 +16,12 @@ From the project root directory run the following commands:
     cd server
     docker compose up
 
+If resetting docker is needed
+```
+docker compose down -v
+docker compose up
+```
+
 This will:
 - Download MySQL (first time only)
 - Create the database: healthappdb
@@ -71,40 +77,4 @@ If successful, you should see:
     Connected to MySQL database
     Server running at http://127.0.0.1:8081/
 
-
-## File Tree
-📦F29PD-Site
- ┣ 📂.git
- ┣ 📂images
- ┃ ┗ 📜yoga.jpg
- ┣ 📂public
- ┃ ┣ 📂pages
- ┃ ┃ ┣ 📜account.html
- ┃ ┃ ┣ 📜browseData.html
- ┃ ┃ ┣ 📜dashboard.html
- ┃ ┃ ┣ 📜index.html
- ┃ ┃ ┣ 📜login.html
- ┃ ┃ ┗ 📜register.html
- ┃ ┣ 📂PrototypeImages
- ┃ ┃ ┣ 📜image1.png
- ┃ ┃ ┣ 📜image11.png
- ┃ ┃ ┣ 📜image3.png
- ┃ ┃ ┣ 📜image5.png
- ┃ ┃ ┗ 📜image7.png
- ┃ ┗ 📂styles
- ┃ ┃ ┣ 📜account.css
- ┃ ┃ ┣ 📜browseData.css
- ┃ ┃ ┣ 📜dashboard.css
- ┃ ┃ ┣ 📜generic.css
- ┃ ┃ ┣ 📜index.css
- ┃ ┃ ┗ 📜register.css
- ┣ 📂server
- ┃ ┣ 📜.env
- ┃ ┣ 📜docker-compose.yml
- ┃ ┣ 📜healthappdb.sql
- ┃ ┣ 📜package-lock.json
- ┃ ┣ 📜package.json
- ┃ ┗ 📜server.js
- ┣ 📜.gitignore
- ┣ 📜PlanningDocument.md
- ┗ 📜README.md
+If this does not appear, check database docker container
