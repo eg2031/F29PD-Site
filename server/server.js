@@ -474,3 +474,32 @@ app.get('/api/user-averages', requireAuth, (req, res) => {
     res.json(results[0]);
   });
 });
+
+/* Manage user weight loss goal */
+app.get('/api/weight-goal', requireAuth, (req, res) => {
+  const userID = req.session.user.userID;
+  const sql = `
+        SELECT u.weightGoal, 
+               MAX(r.weight) as startWeight,
+               MIN(r.weight) as currentWeight
+        FROM users u
+        LEFT JOIN userRecords r ON u.userID = r.userID
+        WHERE u.userID = ?
+    `;
+  connection.query(sql, [userID], (err, results) => {
+    if (err) return res.status(500).json({ error: err.sqlMessage });
+    res.json(results[0]);
+  });
+});
+
+app.post('/api/weight-goal', requireAuth, (req, res) => {
+  const userID = req.session.user.userID;
+  const { weightGoal } = req.body;
+  if (!weightGoal) return res.status(400).json({ error: 'Weight goal required' });
+
+  const sql = `UPDATE users SET weightGoal = ? WHERE userID = ?`;
+  connection.query(sql, [weightGoal, userID], (err) => {
+    if (err) return res.status(500).json({ error: err.sqlMessage });
+    res.json({ success: true });
+  });
+});

@@ -267,6 +267,69 @@ async function loadAverages() { // Load health metrics averages
   }
 }
 
+/* managing weight goal */
+async function loadWeightGoal() {
+  try {
+    const res = await fetch('/api/weight-goal');
+    const data = await res.json();
+
+    const progress = document.getElementById('weightProgress');
+    const stats = document.getElementById('goalStats');
+    const prompt = document.getElementById('goalSetPrompt');
+
+    if (!data.weightGoal) {
+      stats.textContent = 'No goal set yet.';
+      progress.value = 0;
+      prompt.textContent = 'Set a target weight below to track your progress.';
+      return;
+    }
+
+    if (!data.startWeight) {
+      stats.textContent = `Goal: ${data.weightGoal}kg — No weight records yet.`;
+      progress.value = 0;
+      return;
+    }
+
+    const start = data.startWeight;
+    const current = data.currentWeight;
+    const goal = data.weightGoal;
+
+    // How much they need to lose total vs how much they've lost so far
+    const totalToLose = start - goal;
+    const lost = start - current;
+    const percent = totalToLose > 0 ? Math.min(Math.round((lost / totalToLose) * 100), 100) : 0;
+
+    progress.max = 100;
+    progress.value = percent;
+    stats.textContent = `Highest: ${start}kg | Current: ${current}kg | Goal: ${goal}kg (${percent}%)`;
+
+    // Pre-fill the input with current goal
+    document.getElementById('weightGoalInput').value = goal;
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function saveWeightGoal() {
+  const input = document.getElementById('weightGoalInput').value;
+  if (!input) return;
+
+  const res = await fetch('/api/weight-goal', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ weightGoal: parseFloat(input) })
+  });
+
+  const data = await res.json();
+  if (data.success) {
+    showToast('Weight goal saved!', true);
+    loadWeightGoal();
+  } else {
+    showToast('Failed to save goal', false);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const searchBtn = document.getElementById('friendSearchBtn');
   if (searchBtn) {
@@ -276,5 +339,6 @@ document.addEventListener('DOMContentLoaded', () => {
   loadPendingRequests();
   loadLeaderboard();
   loadAverages();
+  loadWeightGoal()
 });
 
