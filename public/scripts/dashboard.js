@@ -253,6 +253,20 @@ async function loadPendingRequests() {
   }
 }
 
+async function loadAverages() { // Load health metrics averages
+  try {
+    const res = await fetch('/api/user-averages');
+    const data = await res.json();
+
+    document.getElementById('avgRestHR').textContent = data.avgRestHR ? `${data.avgRestHR} bpm` : 'No data';
+    document.getElementById('avgActiveHR').textContent = data.avgActiveHR ? `${data.avgActiveHR} bpm` : 'No data';
+    document.getElementById('avgBP').textContent = (data.avgSystolic && data.avgDiastolic) ? `${data.avgSystolic}/${data.avgDiastolic} mmHg` : 'No data';
+    document.getElementById('avgFluid').textContent = data.avgFluid ? `${data.avgFluid.toLocaleString()}ml/day` : 'No data';
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const searchBtn = document.getElementById('friendSearchBtn');
   if (searchBtn) {
@@ -261,4 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadPendingRequests();
   loadLeaderboard();
+  loadAverages();
 });
+

@@ -454,3 +454,23 @@ app.post('/api/gp/join', requireAuth, (req, res) => {
 app.listen(8081, () => {
   console.log("Server running at http://127.0.0.1:8081/");
 });
+
+/* Calculate health metrics */
+app.get('/api/user-averages', requireAuth, (req, res) => {
+  const userID = req.session.user.userID;
+  const sql = `
+        SELECT 
+            ROUND(AVG(restHR)) as avgRestHR,
+            ROUND(AVG(activeHR)) as avgActiveHR,
+            ROUND(AVG(systolicPressure)) as avgSystolic,
+            ROUND(AVG(diastolicPressure)) as avgDiastolic,
+            ROUND(AVG(fluidIntake)) as avgFluid
+        FROM userRecords
+        WHERE userID = ?
+    `;
+
+  connection.query(sql, [userID], (err, results) => {
+    if (err) return res.status(500).json({ error: err.sqlMessage });
+    res.json(results[0]);
+  });
+});
