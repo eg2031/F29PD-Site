@@ -107,5 +107,4 @@ async function rejectPatient(userID) {
 }
 
 loadPending();
-
 loadPatients();
